@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta property="og:image"
+          content="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FqjX6j%2FbtrgjFndP1O%2FEh0y9Wo9pymExG3X2mi1x1%2Fimg.jpg">
+    <meta property="og:title" content="Movie Map">
+    <meta property="og:description" content="영화를 한 눈에 살펴보세요">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="shortcut icon"
+          href="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FznJuC%2FbtrfTLWcCZo%2Fzq1O2qyh65EMbeeHKgmjLK%2Fimg.png">
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+    <!-- 글꼴 -->
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+    <!-- CSS -->
+    <link rel="stylesheet" href="../static/style.css">
+
+    <title>10점 만점에 10조 | 무비맵 </title>
+    <style>
+        .btn-Mega {
+            background-color: #007bff;
+            color: white;
+        }
+    </style>
+
+    <script>
+        $(document).ready(function () {
+            showArticles();
+        });
+
+        function showArticles() {
+            $.ajax({
+                type: "GET",
+                url: "/mega",
+                data: {},
+                success: function (response) {
+                    let events = response['mega_all_events']
+                    for (let i = 0; i < events.length; i++) {
+                        let img = events[i]['img']
+                        let link = events[i]['link']
+                        let title = events[i]['title']
+                        let date = events[i]['date']
+
+                        let temp_html = ` <div class="card">
+                                            <a href="https://www.megabox.co.kr/event/movie">
+                                            <img class="card-img-top"
+                                                src="${img}"
+                                                alt="Card image cap">
+                                                <div class="card-body" style="height:100px;">
+                                                <h5 class="card-title">${title}</h5>
+                                                <p class="card-text">${date}</p>
+                                            </div>
+                                            </a>
+                                        </div>`
+                        $('#cards-box').append(temp_html)
+                    }
+                }
+            })
+        }
+    </script>
+
+</head>
+
+<body>
+    <!-- 탑 메뉴  -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a href="/" class="logo_img"></a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a href="/ranking" class="nav-link" onclick="movie_list()">영화 랭킹</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/event/cgv" class="nav-link" onclick="movie_event()">이벤트</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/map" class="nav-link" onclick="movie_map()">상영관 위치</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- 영화관별 버튼 메뉴  -->
+    <div class="top_button">
+        <p style="font-size:24px; float:left; width:100%;"><h3 style="width:fit-content; margin:auto;">영화관 별 이벤트를 확인해보세요!</h3></p>
+        <br>
+        <a href="/event/cgv"> <button type="button" class="btn btn-outline-primary btn-CGV" style="width:32%;">CGV</button></a>
+        <a href="/event/lotte"><button type="button" class="btn btn-outline-primary btn-Lotte" style="width:32%; margin-left:20px;">롯데시네마</button></a>
+        <a href="/event/mega"><button type="button" class="btn btn-outline-primary btn-Mega" style="width:32%; margin-left:17px;">메가박스</button></a>
+    </div>
+
+    <!-- 극장별 이벤트 이미지 -->
+    <div class="button" style="margin: 10px auto 0px auto;"></div>
+    <div id="cards-box" class="card-columns"></div>
+</body>
+
+</html>
